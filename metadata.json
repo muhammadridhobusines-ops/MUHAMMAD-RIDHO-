@@ -1,0 +1,6 @@
+{
+  "name": "MRB - Mitra Roda Borneo",
+  "description": "Platform Marketplace Mobil Bekas & Baru Kalimantan - Sampit",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
