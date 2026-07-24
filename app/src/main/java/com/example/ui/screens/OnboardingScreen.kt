@@ -55,6 +55,11 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.R
+import com.example.ui.theme.MrbBackground
+import com.example.ui.theme.MrbGold
+
+import androidx.compose.material3.Surface
+import com.example.ui.theme.MrbGoldOutline
 
 data class OnboardingPageData(
     val titlePart1: String,
@@ -88,7 +93,7 @@ val onboardingPages = listOf(
             "Bebas Bekas Laka & Banjir",
             "Garansi Mesin 1 Tahun"
         ),
-        imageRes = R.drawable.img_car_hrv
+        imageRes = R.drawable.img_bg_veloz_1784874232737
     ),
     OnboardingPageData(
         titlePart1 = "Kemudahan ",
@@ -100,12 +105,12 @@ val onboardingPages = listOf(
             "Proses Cepat 1x24 Jam",
             "Antar Unit Kalteng & Kalsel"
         ),
-        imageRes = R.drawable.img_car_supra
+        imageRes = R.drawable.img_bg_pajero_1784874257799
     )
 )
 
-val GoldThemeColor = Color(0xFFF5B72D)
-val DarkBgColor = Color(0xFF0D0D0D)
+val GoldThemeColor = MrbGold
+val DarkBgColor = MrbBackground
 
 @Composable
 fun OnboardingScreen(
@@ -163,9 +168,36 @@ fun OnboardingScreen(
                     .statusBarsPadding()
                     .navigationBarsPadding()
                     .padding(horizontal = 24.dp)
-                    .padding(top = 16.dp, bottom = 120.dp),
+                    .padding(top = 24.dp, bottom = 120.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                // MRB Top Logo Badge
+                AnimatedVisibility(
+                    visible = isVisible,
+                    enter = fadeIn(animationSpec = tween(600))
+                ) {
+                    Surface(
+                        shape = RoundedCornerShape(20.dp),
+                        color = MrbGold,
+                        border = androidx.compose.foundation.BorderStroke(1.5.dp, MrbGoldOutline),
+                        shadowElevation = 8.dp,
+                        modifier = Modifier
+                            .size(76.dp)
+                            .padding(bottom = 4.dp)
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.img_mrb_logo_badge_1784874215022),
+                            contentDescription = "MRB Logo",
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .clip(RoundedCornerShape(20.dp))
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
                 // Title Text
                 AnimatedVisibility(
                     visible = isVisible,

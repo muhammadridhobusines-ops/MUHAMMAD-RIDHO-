@@ -18,10 +18,53 @@ class CarRepository(
     private val _cars = MutableStateFlow<List<CarItem>>(initialCarData)
     val cars: StateFlow<List<CarItem>> = _cars.asStateFlow()
 
-    private val _creditRequests = MutableStateFlow<List<CreditRequest>>(emptyList())
+    private val _creditRequests = MutableStateFlow<List<CreditRequest>>(
+        listOf(
+            CreditRequest(
+                id = "cred-101",
+                carId = "mrb-001",
+                carName = "Toyota Innova Reborn 2.4 G",
+                carPriceRp = 395000000L,
+                dpRp = 50000000L,
+                tenorMonths = 36,
+                monthlyInstallmentRp = 11200000L,
+                applicantName = "Ahmad Hidayat",
+                applicantPhone = "081255443322",
+                applicantJob = "Wiraswasta",
+                status = "Dalam Proses Review"
+            ),
+            CreditRequest(
+                id = "cred-102",
+                carId = "mrb-003",
+                carName = "Honda HR-V 1.5 SE CVT",
+                carPriceRp = 345000000L,
+                dpRp = 40000000L,
+                tenorMonths = 48,
+                monthlyInstallmentRp = 8100000L,
+                applicantName = "Siti Rahmah",
+                applicantPhone = "085249887711",
+                applicantJob = "PNS Sampit",
+                status = "Baru Masuk"
+            )
+        )
+    )
     val creditRequests: StateFlow<List<CreditRequest>> = _creditRequests.asStateFlow()
 
-    private val _bookingRequests = MutableStateFlow<List<BookingRequest>>(emptyList())
+    private val _bookingRequests = MutableStateFlow<List<BookingRequest>>(
+        listOf(
+            BookingRequest(
+                id = "book-201",
+                carId = "mrb-002",
+                carName = "Toyota GR Supra 1.5 Sport",
+                userName = "Budi Santoso",
+                userPhone = "081349001122",
+                bookingDate = "25 Juli 2026",
+                bookingFeeRp = 5000000L,
+                paymentMethod = "Transfer Bank Mandiri",
+                status = "Baru Masuk"
+            )
+        )
+    )
     val bookingRequests: StateFlow<List<BookingRequest>> = _bookingRequests.asStateFlow()
 
     val favoriteIds: Flow<List<String>> = favoriteCarDao.getAllFavoriteIds()

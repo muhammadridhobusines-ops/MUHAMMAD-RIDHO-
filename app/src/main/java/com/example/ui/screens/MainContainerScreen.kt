@@ -64,6 +64,7 @@ fun MainContainerScreen(
     onNavigateToDetail: (CarItem) -> Unit,
     onNavigateToChatRoom: (String) -> Unit,
     onNavigateToAdmin: () -> Unit,
+    onNavigateToPermissions: () -> Unit = {},
     onLogout: () -> Unit
 ) {
     var currentTab by remember { mutableStateOf(MainTab.HOME) }
@@ -175,6 +176,7 @@ fun MainContainerScreen(
                     onNavigateToFavorites = { currentTab = MainTab.FAVORITES },
                     onNavigateToChat = { currentTab = MainTab.CHAT },
                     onNavigateToAdmin = onNavigateToAdmin,
+                    onNavigateToPermissions = onNavigateToPermissions,
                     onLogout = onLogout
                 )
             }

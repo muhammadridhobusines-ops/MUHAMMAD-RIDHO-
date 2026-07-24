@@ -81,8 +81,57 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val userPhone = MutableStateFlow("0857 5456 3358")
     val userEmail = MutableStateFlow("ridho.pratama@gmail.com")
     val userMemberBadge = MutableStateFlow("Member Gold")
+    val userRole = MutableStateFlow("Pembeli (Anggota)")
     val userPhotoUrl = MutableStateFlow<String?>("")
     val userPhotoRes = MutableStateFlow<Int?>(null)
+
+    // Dynamic PIN Management (simulating database persistence)
+    val adminPins = MutableStateFlow(setOf("20050307"))
+    val sellerPins = MutableStateFlow(
+        setOf(
+            "12345678",
+            "1234",
+            "84729156",
+            "00000000",
+            "11111111",
+            "36198524",
+            "59271483",
+            "17846395",
+            "93485127",
+            "62519748",
+            "48173692",
+            "75928416",
+            "21694857",
+            "89352741"
+        )
+    )
+
+    fun validateAdminPin(inputPin: String): Boolean {
+        return adminPins.value.contains(inputPin.trim())
+    }
+
+    fun validateSellerPin(inputPin: String): Boolean {
+        return sellerPins.value.contains(inputPin.trim())
+    }
+
+    fun addSellerPin(newPin: String) {
+        if (newPin.trim().length == 8) {
+            sellerPins.value = sellerPins.value + newPin.trim()
+        }
+    }
+
+    fun removeSellerPin(pin: String) {
+        sellerPins.value = sellerPins.value - pin.trim()
+    }
+
+    fun setUserRole(role: String) {
+        userRole.value = role
+        when {
+            role.contains("Admin", ignoreCase = true) -> userMemberBadge.value = "Admin"
+            role.contains("Penjual", ignoreCase = true) -> userMemberBadge.value = "Mitra Penjual"
+            else -> userMemberBadge.value = "Pembeli (Anggota)"
+        }
+    }
 
     fun updateProfile(
         newName: String,
@@ -98,9 +147,38 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         userPhotoRes.value = newPhotoRes
     }
 
-    // Admin Requests lists
+    // Admin Requests & Approvals
     val creditRequests: StateFlow<List<CreditRequest>> = carRepository.creditRequests
     val bookingRequests: StateFlow<List<BookingRequest>> = carRepository.bookingRequests
+
+    val pendingCars: StateFlow<List<CarItem>> = combine(carRepository.cars) { carsList ->
+        carsList[0].filter { it.status.contains("Menunggu", ignoreCase = true) || it.status.contains("Pending", ignoreCase = true) }
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+
+    fun approveCar(carId: String) {
+        val car = carRepository.getCarById(carId)
+        if (car != null) {
+            val updated = car.copy(status = "Ready", isVerified = true)
+            carRepository.updateCar(updated)
+        }
+    }
+
+    fun rejectCar(carId: String, reason: String = "Spesifikasi/foto belum memenuhi standar MRB") {
+        carRepository.deleteCar(carId)
+    }
+
+    fun updateCarStatus(carId: String, newStatus: String) {
+        val car = carRepository.getCarById(carId)
+        if (car != null) {
+            val updated = car.copy(status = newStatus)
+            carRepository.updateCar(updated)
+        }
+    }
+
+    fun submitCarFromSales(newCar: CarItem) {
+        val pendingCar = newCar.copy(status = "Menunggu Persetujuan Admin", isVerified = false)
+        carRepository.addCar(pendingCar)
+    }
 
     fun updateSearchQuery(query: String) {
         _searchQuery.value = query

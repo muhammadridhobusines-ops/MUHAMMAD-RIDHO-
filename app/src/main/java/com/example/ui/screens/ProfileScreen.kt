@@ -42,6 +42,8 @@ import androidx.compose.material.icons.filled.RemoveRedEye
 import androidx.compose.material.icons.outlined.Chat
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Security
+import androidx.compose.material.icons.filled.Shield
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -90,6 +92,7 @@ fun ProfileScreen(
     onNavigateToFavorites: () -> Unit,
     onNavigateToChat: () -> Unit,
     onNavigateToAdmin: () -> Unit,
+    onNavigateToPermissions: () -> Unit = {},
     onLogout: () -> Unit
 ) {
     val name by viewModel.userName.collectAsState()
@@ -327,6 +330,13 @@ fun ProfileScreen(
                             infoDialogTitle = "Alamat Pengiriman/Inspeksi"
                             infoDialogMessage = "Lokasi: Palangka Raya / Banjarmasin (Kalteng & Kalsel).\nHubungi admin untuk ubah lokasi antar unit."
                         }
+                    )
+                    ProfileMenuItem(
+                        icon = Icons.Default.Security,
+                        title = "Izin Aplikasi",
+                        badgeText = "Akses HP",
+                        badgeColor = MrbGold,
+                        onClick = onNavigateToPermissions
                     )
                     ProfileMenuItem(
                         icon = Icons.Default.HelpOutline,

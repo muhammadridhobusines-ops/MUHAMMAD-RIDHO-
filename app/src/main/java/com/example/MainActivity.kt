@@ -15,11 +15,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.example.ui.screens.AddCarScreen
 import com.example.ui.screens.AdminDashboardScreen
+import com.example.ui.screens.AppPermissionsScreen
 import com.example.ui.screens.CarDetailScreen
 import com.example.ui.screens.ChatRoomScreen
 import com.example.ui.screens.LoginScreen
 import com.example.ui.screens.MainContainerScreen
 import com.example.ui.screens.OnboardingScreen
+import com.example.ui.screens.RoleSelectionScreen
+import com.example.ui.screens.SellerDashboardScreen
 import com.example.ui.screens.SplashScreen
 import com.example.ui.theme.MrbBackground
 import com.example.ui.theme.MrbTheme
@@ -29,11 +32,14 @@ sealed class AppScreen {
     object Splash : AppScreen()
     object Onboarding : AppScreen()
     object Login : AppScreen()
+    object RoleSelection : AppScreen()
     object Main : AppScreen()
     object CarDetail : AppScreen()
     data class ChatRoom(val threadId: String) : AppScreen()
     object AdminDashboard : AppScreen()
+    object SellerDashboard : AppScreen()
     object AddCar : AppScreen()
+    object Permissions : AppScreen()
 }
 
 class MainActivity : ComponentActivity() {
@@ -69,7 +75,25 @@ class MainActivity : ComponentActivity() {
                         is AppScreen.Login -> {
                             LoginScreen(
                                 onLoginSuccess = {
-                                    currentScreen = AppScreen.Main
+                                    currentScreen = AppScreen.RoleSelection
+                                }
+                            )
+                        }
+                        is AppScreen.RoleSelection -> {
+                            RoleSelectionScreen(
+                                viewModel = viewModel,
+                                onRoleSelected = { role ->
+                                    viewModel.setUserRole(role)
+                                    if (role.contains("Admin", ignoreCase = true)) {
+                                        currentScreen = AppScreen.AdminDashboard
+                                    } else if (role.contains("Penjual", ignoreCase = true) || role.contains("Sales", ignoreCase = true) || role.contains("Makelar", ignoreCase = true)) {
+                                        currentScreen = AppScreen.SellerDashboard
+                                    } else {
+                                        currentScreen = AppScreen.Main
+                                    }
+                                },
+                                onNavigateBack = {
+                                    currentScreen = AppScreen.Login
                                 }
                             )
                         }
@@ -85,6 +109,9 @@ class MainActivity : ComponentActivity() {
                                 },
                                 onNavigateToAdmin = {
                                     currentScreen = AppScreen.AdminDashboard
+                                },
+                                onNavigateToPermissions = {
+                                    currentScreen = AppScreen.Permissions
                                 },
                                 onLogout = {
                                     currentScreen = AppScreen.Login
@@ -122,11 +149,29 @@ class MainActivity : ComponentActivity() {
                                 }
                             )
                         }
+                        is AppScreen.SellerDashboard -> {
+                            SellerDashboardScreen(
+                                viewModel = viewModel,
+                                onNavigateToChatRoom = { threadId ->
+                                    currentScreen = AppScreen.ChatRoom(threadId)
+                                },
+                                onLogout = {
+                                    currentScreen = AppScreen.RoleSelection
+                                }
+                            )
+                        }
                         is AppScreen.AddCar -> {
                             AddCarScreen(
                                 viewModel = viewModel,
                                 onNavigateBack = {
                                     currentScreen = AppScreen.AdminDashboard
+                                }
+                            )
+                        }
+                        is AppScreen.Permissions -> {
+                            AppPermissionsScreen(
+                                onNavigateBack = {
+                                    currentScreen = AppScreen.Main
                                 }
                             )
                         }

@@ -117,18 +117,41 @@ fun HomeScreen(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Column {
-                    Text(
-                        text = "Selamat Pagi,",
-                        fontSize = 12.sp,
-                        color = MrbTextMuted
-                    )
-                    Text(
-                        text = "Hai, Teman MRB! 👋",
-                        fontSize = 17.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = MrbTextWhite
-                    )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    // Rounded Square Logo (Sudut Cembung)
+                    Surface(
+                        shape = RoundedCornerShape(14.dp),
+                        color = MrbGold,
+                        border = androidx.compose.foundation.BorderStroke(1.dp, MrbGoldOutline),
+                        modifier = Modifier.size(46.dp)
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.img_mrb_logo_badge_1784874215022),
+                            contentDescription = "MRB Logo",
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .clip(RoundedCornerShape(14.dp))
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.width(12.dp))
+
+                    Column {
+                        Text(
+                            text = "Selamat Pagi,",
+                            fontSize = 12.sp,
+                            color = MrbTextMuted
+                        )
+                        Text(
+                            text = "Mitra Roda Borneo 👋",
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = MrbTextWhite
+                        )
+                    }
                 }
 
                 IconButton(

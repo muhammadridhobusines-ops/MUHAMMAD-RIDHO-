@@ -3,6 +3,6 @@
     <item
         android:width="108dp"
         android:height="108dp"
-        android:drawable="@drawable/img_mrb_logo"
+        android:drawable="@drawable/mrb_racing_stripe_logo_1784824450500"
         android:gravity="center" />
 </layer-list>
